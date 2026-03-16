@@ -1,3 +1,8 @@
 /.venv
 .idea
 __pycache__/
+
+# Ignore raw & processed (json) dataset (only keep folder structure)
+/data/raw/SROIE2019/
+/data/processed/TEST_DATA.json
+/data/processed/TRAIN_DATA.json
