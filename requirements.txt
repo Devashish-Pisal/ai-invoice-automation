@@ -1,3 +1,5 @@
+datasets
+kagglehub
 fastapi
 unicorn[standard]
 numpy
