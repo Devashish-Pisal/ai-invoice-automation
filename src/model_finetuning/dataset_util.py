@@ -1,3 +1,6 @@
+from fontTools.misc.cython import returns
+from sklearn.externals.array_api_compat.dask.array import trunc
+
 from path_config import TRAIN_DATASET_PATH, TEST_DATASET_PATH
 from PIL import Image
 from loguru import logger
@@ -55,3 +58,32 @@ def quad_to_bbox(quad):
     xs = quad[0::2]
     ys = quad[1::2]
     return [min(xs), min(ys), max(xs), max(ys)]
+
+
+def preprocess(sample, label2id_mapping, processor):
+    """
+    Preprocess the sample for training & testing.
+    """
+    image_path = sample['img_path']
+    words = sample['words']
+    bboxes = sample['bboxes']
+    string_labels = sample['labels']
+
+    image = Image.open(image_path).convert("RGB") # Get image on the fly while training and covert it into RGB format
+    integer_labels = [label2id_mapping[label] for label in string_labels] # Covert the string labels into integer label, so model can process it.
+    # Use the processor to tokenize the words
+    encoding = processor(
+        image=image,
+        words=words,
+        boxes=bboxes,
+        word_labels=integer_labels,
+        padding="max_length",
+        truncation=True,
+        max_length=512,
+        return_tensors="pt",
+    )
+    # Remove the batch dimension
+    encoding = {k: v.squeeze(0) for k, v in encoding.items()}
+
+    return encoding
+
