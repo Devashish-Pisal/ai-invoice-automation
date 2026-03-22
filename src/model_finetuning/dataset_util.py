@@ -3,13 +3,13 @@ from loguru import logger
 import json
 
 
+
 def parse_sroie_sample(img_path, box_path, entity_path):
     """
     Create words, bounding boxes and labels from the image, box data, and entity data.
     """
     with Image.open(img_path) as img:
         width, height = img.size
-
     words = []
     boxes = []
     # Parse OCR
@@ -28,7 +28,6 @@ def parse_sroie_sample(img_path, box_path, entity_path):
             ]
             words.append(word)
             boxes.append(norm_box)
-
     # Parse entities
     with open(entity_path, "r", encoding="utf-8") as file:
         gt_dict = json.load(file)
@@ -42,7 +41,6 @@ def parse_sroie_sample(img_path, box_path, entity_path):
                     labels[j] = f"B-{field.upper()}" if i == 0 else f"I-{field.upper()}"
     if len(words) == 0 or len(boxes) == 0 or len(labels) == 0:
         logger.error(f"Empty words/boxes/labels: {img_path}, {box_path}, {entity_path}")
-
     return words, boxes, labels
 
 
@@ -64,7 +62,6 @@ def preprocess(sample, label2id_mapping, processor):
     words = sample['words']
     bboxes = sample['bboxes']
     string_labels = sample['labels']
-
     image = Image.open(image_path).convert("RGB") # Get image on the fly while training and covert it into RGB format
     integer_labels = [label2id_mapping[label] for label in string_labels] # Covert the string labels into integer label, so model can process it.
     # Use the processor to tokenize the words
@@ -80,6 +77,5 @@ def preprocess(sample, label2id_mapping, processor):
     )
     # Remove the batch dimension
     encoding = {k: v.squeeze(0) for k, v in encoding.items()}
-
     return encoding
 
