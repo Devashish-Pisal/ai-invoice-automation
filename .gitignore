@@ -8,3 +8,6 @@ __pycache__/
 /data/processed/TRAIN_DATA.json
 /data/processed/ENCODED_TRAIN_DATASET.pt
 /data/processed/ENCODED_TEST_DATASET.pt
+
+# Secrets
+.env
