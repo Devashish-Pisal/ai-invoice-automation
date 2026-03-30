@@ -1,0 +1,6 @@
+
+The LayoutLM model is fine-tuned on SROIE dataset and uploaded to huggingface. It can be downloaded from:
+https://huggingface.co/devashish-pisal/layoutlmv3-sroie-token-classification
+
+
+Note: In this project for inference the model is directly getting loaded from the huggingface.
